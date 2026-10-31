@@ -1,0 +1,204 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { NEGOCIO, CONFIANZA, SERVICIOS, RAZONES, GALERIA, PROMO_MES, FRASES, waLink } from '../data/site';
+
+const waHola = waLink('Hola Viviam 🤍 Quisiera reservar una cita.');
+const mapaSrc = `https://www.google.com/maps?q=${encodeURIComponent(NEGOCIO.mapa)}&output=embed`;
+const mapaLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(NEGOCIO.mapa)}`;
+---
+<Base>
+  <!-- Portada -->
+  <section class="hero" id="inicio">
+    <div class="hero-image">
+      <img src="/assets/img/francesa-espejo.webp" alt="Uñas almendradas con francesa efecto espejo y anillos dorados" width="480" height="640" fetchpriority="high" />
+    </div>
+    <p class="script hero-script" aria-hidden="true">Uñas bonitas,<br />tú más feliz ♡</p>
+    <div class="wrap hero-content">
+      <p class="eyebrow">Estudio de uñas en Comas</p>
+      <h1>Uñas perfectas<br />para ti, todos<br />los días</h1>
+      <p class="lead">Cuidado de tu uña natural, diseños hermosos y un momento solo para ti, porque te lo mereces.</p>
+      <div class="hero-actions">
+        <a class="btn btn-black" href={waHola} target="_blank" rel="noopener">Reservar mi cita <Icon name="arrow" /></a>
+        <a class="play-link" href={NEGOCIO.videoEstudio} target="_blank" rel="noopener"><span><Icon name="play" /></span>Ver nuestro estudio</a>
+      </div>
+      <ul class="trust">
+        {CONFIANZA.map((c) => <li><Icon name={c.icono} /><strong>{c.titulo}</strong><span>{c.detalle}</span></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Servicios -->
+  <section class="section" id="servicios">
+    <div class="wrap">
+      <header class="section-head">
+        <div>
+          <p class="eyebrow">Nuestros servicios</p>
+          <h2>Consiéntete</h2>
+        </div>
+        <a class="head-link" href="#reservar">Reservar un servicio <Icon name="arrow" /></a>
+      </header>
+      <div class="services">
+        {SERVICIOS.map((s) => (
+          <a class="service" href={waLink(`Hola Viviam 🤍 Quiero reservar ${s.nombre}.`)} target="_blank" rel="noopener">
+            <div class="service-img"><img src={s.imagen} alt="" loading="lazy" width="480" height="640" /></div>
+            <div class="service-body">
+              <span class="service-icon"><Icon name={s.icono} /></span>
+              <h3>{s.nombre}</h3>
+              <p>{s.detalle}</p>
+              {s.precio && <span class="price">{s.precio}</span>}
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Por qué elegirnos -->
+  <section class="why" id="nosotras">
+    <div class="why-image">
+      <img src="/assets/img/estudio-letrero.webp" alt="Letrero dorado de Viviam Chávez Nails en la pared del estudio" width="360" height="487" loading="lazy" />
+    </div>
+    <div class="why-copy">
+      <p class="script why-script" aria-hidden="true">Mírate y<br />siéntete bien ♡</p>
+      <p class="eyebrow">Por qué elegir a Viviam Chávez Nails</p>
+      <h2>Más que un<br />salón de uñas</h2>
+      <p class="why-story">Lo que empezó como Galivis Nails hoy es Viviam Chávez Nails: un sueño de niña hecho realidad, con un estudio propio en Comas para consentirte.</p>
+      <ul class="features">
+        {RAZONES.map((r) => <li><span class="feature-icon"><Icon name={r.icono} /></span><div><strong>{r.titulo}</strong><span>{r.detalle}</span></div></li>)}
+      </ul>
+      <a class="btn btn-pink" href={waHola} target="_blank" rel="noopener">Reserva tu momento <Icon name="arrow" /></a>
+    </div>
+  </section>
+
+  <!-- Galería -->
+  <section class="section" id="galeria">
+    <div class="wrap">
+      <header class="section-head">
+        <div>
+          <p class="eyebrow">Nuestros trabajos</p>
+          <h2>Diseños que hablan por ti</h2>
+        </div>
+        <a class="head-link" href={NEGOCIO.instagram} target="_blank" rel="noopener">Ver más en Instagram <Icon name="arrow" /></a>
+      </header>
+      <div class="gallery">
+        {GALERIA.map((g) => (
+          <figure class="gallery-item" data-nombre={g.nombre}>
+            <button type="button" class="gallery-zoom" aria-label={`Ampliar: ${g.nombre}`}>
+              <img src={g.src} alt={g.alt} width={g.ancho} height={g.alto} loading="lazy" />
+            </button>
+            <figcaption>
+              <a href={waLink(`Hola Viviam 🤍 Quiero este diseño: ${g.nombre}.`)} target="_blank" rel="noopener"><Icon name="heart" />Lo quiero</a>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Oferta -->
+  {PROMO_MES.activa && (
+    <section class="offer" id="promocion">
+      <div class="wrap offer-grid">
+        <div class="offer-copy">
+          <p class="eyebrow">Promoción del mes</p>
+          <h2>{PROMO_MES.titulo}</h2>
+          <p>{PROMO_MES.detalle}</p>
+          <a class="btn btn-black" href={waLink(PROMO_MES.mensaje)} target="_blank" rel="noopener">Quiero mi promo <Icon name="arrow" /></a>
+        </div>
+        <div class="offer-image">
+          <img src="/assets/img/esmalte-chocolate.webp" alt="Esmalte en gel color chocolate" width="360" height="512" loading="lazy" />
+        </div>
+        <p class="script offer-script" aria-hidden="true">Pequeños detalles,<br />gran felicidad ♡</p>
+      </div>
+    </section>
+  )}
+
+  <!-- Frases -->
+  <section class="section" id="frases">
+    <div class="wrap">
+      <header class="section-head">
+        <div>
+          <p class="eyebrow">Lo que nos inspira</p>
+          <h2>Amor propio en cada detalle</h2>
+        </div>
+        <div class="slider-nav">
+          <button type="button" data-slide="-1" aria-label="Anterior"><Icon name="left" /></button>
+          <button type="button" data-slide="1" aria-label="Siguiente"><Icon name="right" /></button>
+        </div>
+      </header>
+      <div class="quotes" data-slider>
+        {FRASES.map((f) => (
+          <figure class="quote-card">
+            <blockquote>“{f.texto}”</blockquote>
+            <figcaption>
+              <img src="/favicon.svg" alt="" width="40" height="40" />
+              <span><strong>{NEGOCIO.nombre}</strong>{f.fuente}</span>
+              <a href={NEGOCIO.instagram} target="_blank" rel="noopener" aria-label="Ver en Instagram"><Icon name="instagram" /></a>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Reserva -->
+  <section class="section booking-section" id="reservar">
+    <div class="wrap booking">
+      <div class="booking-info">
+        <p class="eyebrow">Reserva tu cita</p>
+        <h2>Separa tu momento</h2>
+        <p class="booking-lead">Completa tus datos y se abrirá WhatsApp con tu mensaje listo. Te confirmamos disponibilidad y precio por chat.</p>
+        <div class="map">
+          <iframe src={mapaSrc} title="Mapa: Viviam Chávez Nails en Comas" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <a class="head-link" href={mapaLink} target="_blank" rel="noopener"><Icon name="route" />{NEGOCIO.direccion}, Comas</a>
+      </div>
+      <form class="booking-form" data-booking novalidate>
+        <div class="field">
+          <label for="f-nombre">Tu nombre</label>
+          <input id="f-nombre" name="nombre" autocomplete="given-name" placeholder="¿Cómo te llamas?" required aria-describedby="f-error" />
+        </div>
+        <div class="field">
+          <label for="f-servicio">Servicio</label>
+          <select id="f-servicio" name="servicio">
+            {SERVICIOS.map((s) => <option value={s.nombre}>{s.nombre}</option>)}
+            <option value="Francesa efecto espejo">Francesa efecto espejo</option>
+            <option value="Promoción del mes">Promoción del mes</option>
+            <option value="Aún no sé, quiero asesoría">Aún no sé, quiero asesoría</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="f-fecha">Día que prefieres</label>
+            <input id="f-fecha" name="fecha" type="date" />
+          </div>
+          <div class="field">
+            <label for="f-turno">Horario</label>
+            <select id="f-turno" name="turno">
+              <option>Mañana (10 a. m. a 1 p. m.)</option>
+              <option>Tarde (1 p. m. a 6 p. m.)</option>
+              <option>Noche (6 p. m. a 10 p. m.)</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-nota">Comentario <small>(opcional)</small></label>
+          <textarea id="f-nota" name="nota" rows="2" placeholder="Ej.: quiero francesa en tono nude"></textarea>
+        </div>
+        <p class="form-error" id="f-error" data-form-error role="alert" hidden>Escribe tu nombre para enviar la solicitud.</p>
+        <button class="btn btn-black btn-block" type="submit"><Icon name="whatsapp" />Enviar por WhatsApp</button>
+      </form>
+    </div>
+  </section>
+
+  <dialog class="lightbox" data-lightbox aria-label="Diseño ampliado">
+    <button class="lb-btn lb-close" type="button" data-lb-close aria-label="Cerrar"><Icon name="close" /></button>
+    <button class="lb-btn lb-prev" type="button" data-lb-prev aria-label="Anterior"><Icon name="left" /></button>
+    <figure>
+      <img data-lb-img alt="" />
+      <figcaption><span data-lb-cap></span><a class="btn btn-pink btn-sm" data-lb-wa href={waHola} target="_blank" rel="noopener"><Icon name="heart" />Quiero este diseño</a></figcaption>
+    </figure>
+    <button class="lb-btn lb-next" type="button" data-lb-next aria-label="Siguiente"><Icon name="right" /></button>
+  </dialog>
+</Base>

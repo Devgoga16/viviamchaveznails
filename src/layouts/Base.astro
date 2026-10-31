@@ -1,0 +1,142 @@
+---
+import '../styles/global.css';
+import Icon from '../components/Icon.astro';
+import { NEGOCIO, PROMO_MES, SERVICIOS, waLink } from '../data/site';
+
+interface Props { title?: string; description?: string }
+const {
+  title = 'Viviam Chávez Nails | Manicure y pedicure en Comas',
+  description = 'Estudio de uñas en Comas especializado en uña natural: rubber, builder gel, dual system, extensiones, diseños y pedicure. Lunes a domingo de 10 a. m. a 10 p. m. Reserva por WhatsApp.',
+} = Astro.props;
+
+const nav = [
+  { href: '#inicio', label: 'Inicio' },
+  { href: '#servicios', label: 'Servicios' },
+  { href: '#galeria', label: 'Galería' },
+  { href: '#nosotras', label: 'Nosotras' },
+  { href: '#promocion', label: 'Promociones' },
+  { href: '#contacto', label: 'Contacto' },
+];
+const waHola = waLink('Hola Viviam 🤍 Quisiera reservar una cita.');
+const ogImage = new URL('/assets/img/francesa-espejo.webp', Astro.site).href;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'NailSalon',
+  name: NEGOCIO.nombre,
+  telephone: '+' + NEGOCIO.whatsapp,
+  image: ogImage,
+  sameAs: [NEGOCIO.instagram],
+  openingHours: 'Mo-Su 10:00-22:00',
+  address: { '@type': 'PostalAddress', streetAddress: NEGOCIO.direccion, addressLocality: 'Comas', addressRegion: 'Lima', addressCountry: 'PE' },
+};
+---
+<!doctype html>
+<html lang="es-PE" class="no-js">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="theme-color" content="#F6E6E3" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_PE" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Gilda+Display&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preload" as="image" href="/assets/img/francesa-espejo.webp" />
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <script is:inline>document.documentElement.classList.replace('no-js', 'js');</script>
+</head>
+<body>
+  <a class="sr-only" href="#main">Ir al contenido</a>
+
+  {PROMO_MES.activa && (
+    <div class="announce">
+      <Icon name="sparkle" />
+      <span>{PROMO_MES.barra}</span>
+      <a class="announce-btn" href={waLink(PROMO_MES.mensaje)} target="_blank" rel="noopener">Pregúntanos <Icon name="arrow" /></a>
+    </div>
+  )}
+
+  <header class="header" id="header">
+    <div class="wrap">
+      <a class="brand" href="#inicio" aria-label="Viviam Chávez Nails, ir al inicio">
+        <img src="/assets/img/logo-viviam-chavez.png" alt="Viviam Chávez Nails" width="1077" height="230" />
+      </a>
+      <nav class="nav" aria-label="Principal">
+        {nav.map((n, i) => <a href={n.href} class={i === 0 ? 'active' : undefined}>{n.label}</a>)}
+      </nav>
+      <a class="btn btn-black btn-sm btn-header" href={waHola} target="_blank" rel="noopener">Reservar cita <Icon name="arrow" /></a>
+      <button class="menu-toggle" type="button" data-menu-open aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-nav"><Icon name="menu" /></button>
+    </div>
+  </header>
+
+  <div class="mobile-nav" id="mobile-nav" aria-hidden="true">
+    <div class="mobile-nav-top">
+      <img src="/assets/img/logo-viviam-chavez.png" alt="Viviam Chávez Nails" width="1077" height="230" />
+      <button class="icon-btn" type="button" data-menu-close aria-label="Cerrar menú"><Icon name="close" /></button>
+    </div>
+    <nav aria-label="Menú móvil">
+      {nav.map((n) => <a class="link" href={n.href} data-menu-link>{n.label}</a>)}
+    </nav>
+    <div class="mobile-nav-foot">
+      <a class="btn btn-black" href={waHola} target="_blank" rel="noopener"><Icon name="whatsapp" />Reservar por WhatsApp</a>
+      <p>{NEGOCIO.direccion}, {NEGOCIO.distrito}<br />{NEGOCIO.horario}</p>
+    </div>
+  </div>
+
+  <main id="main">
+    <slot />
+  </main>
+
+  <footer class="footer" id="contacto">
+    <div class="wrap footer-grid">
+      <div class="footer-brand">
+        <img src="/assets/img/logo-viviam-chavez.png" alt="Viviam Chávez Nails" width="1077" height="230" loading="lazy" />
+        <p>Uñas perfectas para ti.</p>
+        <div class="footer-social">
+          <a href={NEGOCIO.instagram} target="_blank" rel="noopener" aria-label="Instagram"><Icon name="instagram" /></a>
+          <a href={waHola} target="_blank" rel="noopener" aria-label="WhatsApp"><Icon name="whatsapp" /></a>
+        </div>
+      </div>
+      <div>
+        <h3>Enlaces</h3>
+        <ul>{nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}</ul>
+      </div>
+      <div>
+        <h3>Servicios</h3>
+        <ul>{SERVICIOS.map((s) => <li><a href="#servicios">{s.nombre}</a></li>)}</ul>
+      </div>
+      <div>
+        <h3>Contacto</h3>
+        <ul class="footer-contact">
+          <li><Icon name="pin" /><span>{NEGOCIO.direccion},<br />{NEGOCIO.distrito}</span></li>
+          <li><Icon name="whatsapp" /><a href={waHola} target="_blank" rel="noopener">{NEGOCIO.telefono}</a></li>
+          <li><Icon name="instagram" /><a href={NEGOCIO.instagram} target="_blank" rel="noopener">{NEGOCIO.usuario}</a></li>
+          <li><Icon name="clock" /><span>Lunes a domingo<br />10:00 a. m. a 10:00 p. m.</span></li>
+        </ul>
+      </div>
+      <p class="script footer-script">Uñas perfectas<br />para ti ♡</p>
+    </div>
+    <div class="wrap footer-bottom">
+      <span>© {new Date().getFullYear()} Viviam Chávez Nails. Todos los derechos reservados.</span>
+      <span>Comas, Lima</span>
+    </div>
+  </footer>
+
+  <a class="wa-float" href={waHola} target="_blank" rel="noopener" aria-label="Reservar por WhatsApp"><Icon name="whatsapp" /></a>
+  <div class="mobile-bar">
+    <a class="btn btn-outline" href="#reservar"><Icon name="calendar" />Agendar</a>
+    <a class="btn btn-wa" href={waHola} target="_blank" rel="noopener"><Icon name="whatsapp" />WhatsApp</a>
+  </div>
+
+  <script>
+    import '../scripts/main.ts';
+  </script>
+</body>
+</html>
